@@ -28,6 +28,41 @@ local Config = {
     TeamCheck = false
 }
 
+-- CRÉDITO COM "made by" BRANCO E "ragkk01" RGB
+
+local RunService = game:GetService("RunService")
+local gui = Instance.new("ScreenGui")
+gui.Name = "Credits"
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
+
+local credit = Instance.new("TextLabel")
+credit.Parent = gui
+credit.BackgroundTransparency = 1
+credit.Position = UDim2.new(1, -10, 0, 10)
+credit.AnchorPoint = Vector2.new(1, 0)
+credit.Size = UDim2.new(0, 180, 0, 20)
+credit.TextXAlignment = Enum.TextXAlignment.Right
+credit.Font = Enum.Font.SourceSansBold
+credit.TextSize = 14
+credit.TextTransparency = 0
+credit.RichText = true
+
+local hue = 0
+RunService.RenderStepped:Connect(function()
+    hue = (hue + 0.01) % 1
+    local rgbColor = Color3.fromHSV(hue, 1, 1)
+    local hex = string.format("#%02x%02x%02x",
+        math.floor(rgbColor.R * 255),
+        math.floor(rgbColor.G * 255),
+        math.floor(rgbColor.B * 255)
+    )
+    credit.Text = '<font color="#FFFFFF">made by</font> <font color="' .. hex .. '">ragkk01</font>'
+end)
+
+-- Ignorar insets da tela (importante para mobile)
+gui.IgnoreGuiInset = true
+
 -- ========== OBJETOS DE DESENHO ==========
 local drawings = {}      -- para cada jogador: tracerLines (tabela), name, hp
 local boxes = {}         -- caixa 2D (Square)
