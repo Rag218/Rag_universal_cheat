@@ -1,10 +1,4 @@
---[[
-    CONFIG GUI + ESP + AIMBOT INTEGRADO (MOBILE FRIENDLY)
-    - Aimbot contínuo (sem necessidade de botão)
-    - Círculo FOV: Verde quando mirando em alguém, Vermelho quando não
-    - Tracer, Box, Name, HP
-    - Sliders para espessuras e suavidade
-]]
+--[[ Rag Cheat🫵😹 ]]
 
 if not game:GetService("RunService"):IsClient() then return end
 
@@ -178,6 +172,7 @@ RLabel.TextColor3 = Color3.new(1,1,1)
 RLabel.TextSize = 24
 RLabel.BackgroundTransparency = 1
 RLabel.Size = UDim2.new(1,0,1,0)
+RLabel.ZIndex = 11
 
 -- Painel de configurações
 SettingsPanel = Instance.new("Frame")
