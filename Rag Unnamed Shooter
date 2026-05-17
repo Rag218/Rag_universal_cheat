@@ -39,6 +39,7 @@ credit.TextXAlignment = Enum.TextXAlignment.Right
 credit.Font = Enum.Font.SourceSansBold
 credit.TextSize = 14
 credit.RichText = true
+credit.ZIndex = 99999
 
 local hue = 0
 RunService.RenderStepped:Connect(function()
