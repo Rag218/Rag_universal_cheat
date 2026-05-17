@@ -1,11 +1,5 @@
---[[
-    CONFIG GUI + ESP + AIMBOT INTEGRADO
-    - Tracer com múltiplas linhas (espessura real no mobile)
-    - Box, Name, HP com ajustes independentes
-    - Sliders: Box Thickness e Tracer Thickness (0.3 a 50, step 0.01)
-    - FOV, Aimbot, WallCheck, TeamCheck
-    - Box sempre visível (mínimo 1 pixel de espessura)
-]]
+
+--RAG CHEAT😈
 
 if not game:GetService("RunService"):IsClient() then return end
 
@@ -31,7 +25,6 @@ local Config = {
 
 -- CRÉDITO COM "made by" BRANCO E "ragkk01" RGB
 
-local RunService = game:GetService("RunService")
 local gui = Instance.new("ScreenGui")
 gui.Name = "Credits"
 gui.ResetOnSpawn = false
@@ -126,7 +119,7 @@ SettingsGUI.Parent = game.CoreGui
 -- Botão R giratório
 local ToggleButton = Instance.new("Frame")
 ToggleButton.Size = UDim2.new(0, 50, 0, 50)
-ToggleButton.Position = UDim2.new(0, 20, 0, 20)
+ToggleButton.Position = UDim2.new(0, 224, 0, 6)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(30,30,30)
 ToggleButton.BackgroundTransparency = 0.2
 ToggleButton.BorderSizePixel = 0
@@ -560,66 +553,23 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- CAIXA 2D (Box) com espessura mínima de 1 pixel
+    -- ESP Box (2D)
     for plr, box in pairs(boxes) do
         local char = plr.Character
         local hum = char and char:FindFirstChildOfClass("Humanoid")
         if char and hum and hum.Health > 0 then
             local minX, minY, maxX, maxY = getCharacterBounds(char)
-            if minX and Config.ESP_Box then
-                box.Visible = true
-                box.Position = Vector2.new(minX, minY)
-                box.Size = Vector2.new(maxX - minX, maxY - minY)
+            if minX and maxX then
+                box.Visible = Config.ESP_Box
                 box.Color = getTeamColor(plr)
-                -- Garante que a caixa nunca suma por espessura < 1
-                box.Thickness = math.max(1, Config.BoxThickness)
+                box.Thickness = math.max(1, Config.BoxThickness)  -- mínimo 1 pixel
+                box.Size = Vector2.new(maxX - minX, maxY - minY)
+                box.Position = Vector2.new(minX, minY)
             else
                 box.Visible = false
             end
         else
             box.Visible = false
         end
-    end
-end)
-
--- ========== AIMBOT ==========
-local function GetClosest()
-    local closest = nil
-    local shortest = Config.FOV
-    for _, plr in pairs(Players:GetPlayers()) do
-        if plr ~= LocalPlayer then
-            local char = plr.Character
-            if char and char:FindFirstChild("Head") and char:FindFirstChild("Humanoid") and char.Humanoid.Health > 0 then
-                if Config.TeamCheck and SameTeam(plr) then continue end
-                local head = char.Head
-                local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
-                if onScreen then
-                    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
-                    local dist = (Vector2.new(pos.X, pos.Y) - center).Magnitude
-                    if dist <= shortest then
-                        if Config.WallCheck then
-                            if Visible(head, char) then
-                                shortest = dist
-                                closest = head
-                            end
-                        else
-                            shortest = dist
-                            closest = head
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return closest
-end
-
-RunService.RenderStepped:Connect(function()
-    local target = GetClosest()
-    if Config.Aimbot_Enabled and target then
-        circleStroke.Color = Color3.fromRGB(0,255,0)
-        Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position)
-    else
-        circleStroke.Color = Config.Aimbot_Enabled and Color3.fromRGB(255,0,0) or Color3.fromRGB(100,100,100)
     end
 end)
