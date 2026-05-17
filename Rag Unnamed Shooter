@@ -155,7 +155,7 @@ SettingsGUI.Parent = game.CoreGui
 -- Botão R giratório (abre/fecha menu)
 local ToggleButton = Instance.new("Frame")
 ToggleButton.Size = UDim2.new(0, 50, 0, 50)
-ToggleButton.Position = UDim2.new(0, 20, 0, 20)
+ToggleButton.Position = UDim2.new(0, 868, 0, 40)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(30,30,30)
 ToggleButton.BackgroundTransparency = 0.2
 ToggleButton.BorderSizePixel = 0
