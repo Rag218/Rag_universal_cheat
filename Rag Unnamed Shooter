@@ -202,19 +202,19 @@ local function SelectTab(name)
     for _,frame in pairs(Tabs) do frame.Visible = false end
     for _,btn in pairs(Buttons) do
         TweenService:Create(btn,TweenInfo.new(0.15),{BackgroundColor3 = Color3.fromRGB(8,8,12)}):Play()
-        if btn:FindFirstChild("UIStroke") then btn.UIStroke.Color = Color3.fromRGB(20,20,30) end
+        if btn:FindFirstChild("UIStroke") then btn.UIStroke.Thickness = 2 end
     end
     Tabs[name].Visible = true
     local Button = Buttons[name]
     TweenService:Create(Button,TweenInfo.new(0.15),{BackgroundColor3 = Color3.fromRGB(22,14,40)}):Play()
-    Button.UIStroke.Color = Color3.fromRGB(132,0,255)
+    Button.UIStroke.Thickness = 0
 end
 
 local function CreateSidebarButton(name)
     local Btn = Instance.new("TextButton")
     Btn.Parent = Sidebar
     Btn.Size = UDim2.new(0,140,0,48)
-    Btn.BackgroundColor3 = Color3.fromRGB(8,8,12)
+    Btn.BackgroundColor3 = Color3.fromif btn:FindFirstChild("UIStroke") then btn.UIStroke.Thickness = 2 endRGB(8,8,12)
     Btn.Text = name
     Btn.TextColor3 = Color3.new(1,1,1)
     Btn.Font = Enum.Font.Gotham
