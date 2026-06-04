@@ -1,4 +1,4 @@
---[Rag Cheat🫵😹]
+--[Made By Rag🫵😹]
 
 if not game:GetService("RunService"):IsClient() then
     return
@@ -202,28 +202,23 @@ local function SelectTab(name)
     for _,frame in pairs(Tabs) do frame.Visible = false end
     for _,btn in pairs(Buttons) do
         TweenService:Create(btn,TweenInfo.new(0.15),{BackgroundColor3 = Color3.fromRGB(8,8,12)}):Play()
-        if btn:FindFirstChild("UIStroke") then btn.UIStroke.Thickness = 2 end
     end
     Tabs[name].Visible = true
     local Button = Buttons[name]
     TweenService:Create(Button,TweenInfo.new(0.15),{BackgroundColor3 = Color3.fromRGB(22,14,40)}):Play()
-    Button.UIStroke.Thickness = 0
 end
 
 local function CreateSidebarButton(name)
     local Btn = Instance.new("TextButton")
     Btn.Parent = Sidebar
     Btn.Size = UDim2.new(0,140,0,48)
-    Btn.BackgroundColor3 = Color3.fromif btn:FindFirstChild("UIStroke") then btn.UIStroke.Thickness = 2 endRGB(8,8,12)
+    Btn.BackgroundColor3 = Color3.fromRGB(8,8,12)
     Btn.Text = name
     Btn.TextColor3 = Color3.new(1,1,1)
     Btn.Font = Enum.Font.Gotham
     Btn.TextSize = 19
     Btn.BorderSizePixel = 0
     Instance.new("UICorner",Btn).CornerRadius = UDim.new(0,12)
-    local Stroke = Instance.new("UIStroke")
-    Stroke.Parent = Btn
-    Stroke.Color = Color3.fromRGB(20,20,30)
     Btn.MouseButton1Click:Connect(function() SelectTab(name) end)
     Buttons[name] = Btn
 end
@@ -497,7 +492,7 @@ end
 local function getBestTarget()
     local center = Camera.ViewportSize / 2
     local bestDist = math.huge
-    local bestPos = nil
+    local bestHeadPos = nil
     for _,plr in pairs(Players:GetPlayers()) do
         if plr ~= LocalPlayer and plr.Character then
             local hum = plr.Character:FindFirstChildOfClass("Humanoid")
@@ -507,22 +502,32 @@ local function getBestTarget()
                 if Config.TeamCheck and SameTeam(plr) then continue end
                 local distance = (root.Position - Camera.CFrame.Position).Magnitude
                 if distance <= Config.Aimbot_MaxRange then
-                    local pos,visible = Camera:WorldToViewportPoint(head.Position)
-                    if visible and pos.Z > 0 then
-                        local dist = (Vector2.new(pos.X,pos.Y) - Vector2.new(center.X,center.Y)).Magnitude
-                        if dist <= Config.FOV then
-                            if Config.WallCheck and not isVisible(head,plr.Character) then continue end
-                            if dist < bestDist then
-                                bestDist = dist
-                                bestPos = head.Position
+                    -- Verifica qualquer parte do personagem no FOV
+                    local minPartDist = math.huge
+                    for _, part in ipairs(plr.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            local pos, visible = Camera:WorldToViewportPoint(part.Position)
+                            if visible and pos.Z > 0 then
+                                local dist = (Vector2.new(pos.X, pos.Y) - Vector2.new(center.X, center.Y)).Magnitude
+                                if dist < minPartDist then
+                                    minPartDist = dist
+                                end
                             end
+                        end
+                    end
+                    if minPartDist <= Config.FOV then
+                        -- Se wallcheck ativado, verifica se a cabeça está visível
+                        if Config.WallCheck and not isVisible(head, plr.Character) then continue end
+                        if minPartDist < bestDist then
+                            bestDist = minPartDist
+                            bestHeadPos = head.Position
                         end
                     end
                 end
             end
         end
     end
-    return bestPos
+    return bestHeadPos
 end
 
 --// LOOP PRINCIPAL (LÓGICA DE SMOOTHNESS INVERTIDA)
@@ -629,7 +634,6 @@ RunService.RenderStepped:Connect(function()
         if targetPos then
             FOVStroke.Color = Color3.fromRGB(0,255,0)
             local targetCF = CFrame.new(Camera.CFrame.Position, targetPos)
-            -- INVERSÃO: alpha = 1 - Smoothness para tornar valores altos mais suaves
             Camera.CFrame = Camera.CFrame:Lerp(targetCF, 1 - Config.Smoothness)
         else
             FOVStroke.Color = Color3.fromRGB(255,0,0)
